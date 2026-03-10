@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipe Scaler Pro</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  background: linear-gradient(135deg,#667eea,#764ba2);
+  min-height:100vh; padding:20px;
+}
+.container {
+  max-width:1300px; margin:0 auto; background:white;
+  border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3); overflow:hidden;
+}
+.header {
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  color:white; padding:26px 38px;
+}
+.header h1 { font-size:2rem; margin-bottom:5px; }
+.header p  { opacity:.9; font-size:.95rem; }
+
+/* Tabs */
+.tabs-bar {
+  display:flex; align-items:center; background:#f0f0f5;
+  border-bottom:2px solid #ddd; padding:0 20px; overflow-x:auto;
+}
+.tab-btn {
+  padding:11px 18px; border:none; background:none; cursor:pointer;
+  font-size:.93rem; font-weight:600; color:#666;
+  border-bottom:3px solid transparent; white-space:nowrap; transition:all .2s;
+}
+.tab-btn.active { color:#667eea; border-bottom-color:#667eea; background:white; }
+.tab-btn:hover:not(.active) { color:#333; background:#e8e8f0; }
+.tab-close {
+  margin-left:7px; color:#bbb; cursor:pointer;
+  border-radius:50%; padding:1px 5px; font-size:.85rem;
+}
+.tab-close:hover { background:#dc3545; color:white; }
+.add-tab-btn {
+  padding:7px 15px; background:none; border:none;
+  cursor:pointer; font-size:1.4rem; color:#667eea; font-weight:bold;
+}
+.add-tab-btn:hover { transform:scale(1.2); display:inline-block; }
+
+/* Panels */
+.panel { display:none; padding:28px 38px; }
+.panel.active { display:block; }
+.section-title {
+  font-size:1.15rem; color:#333; margin-bottom:14px;
+  padding-bottom:7px; border-bottom:3px solid #667eea;
+}
+
+/* Config grid */
+.cfg-grid {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px; margin-bottom:22px;
+}
+.fg { display:flex; flex-direction:column; }
+label { font-weight:600; color:#555; margin-bottom:5px; font-size:.87rem; }
+input, select {
+  padding:9px 11px; border:2px solid #e0e0e0;
+  border-radius:8px; font-size:.92rem; transition:border-color .2s;
+}
+input:focus, select:focus { outline:none; border-color:#667eea; }
+.irow { display:flex; gap:7px; }
+.irow input  { flex:1; }
+.irow select { flex:0 0 145px; }
+
+/* Ingredient table */
+.ing-wrap {
+  background:#f8f9fa; padding:18px; border-radius:12px; margin-bottom:18px;
+}
+.paste-hint {
+  background:#e8f4fd; border-left:4px solid #2196f3;
+  padding:9px 13px; border-radius:4px; font-size:.84rem;
+  margin-bottom:13px; color:#1a5276; line-height:1.5;
+}
+.tbl-wrap { overflow-x:auto; outline:none; }
+table.it {
+  width:100%; border-collapse:collapse; background:white;
+  border-radius:8px; overflow:hidden; font-size:.88rem; min-width:500px;
+}
+table.it th {
+  background:#667eea; color:white; padding:9px 11px;
+  text-align:left; font-weight:600;
+}
+table.it td {
+  padding:6px 8px; border-bottom:1px solid #eee; vertical-align:middle;
+}
+table.it tr:last-child td { border-bottom:none; }
+table.it tr:hover td { background:#f4f0ff; }
+table.it input[type=text]   { min-width:120px; width:100%; }
+table.it input[type=number] { width:72px; }
+table.it select { font-size:.85rem; padding:5px 7px; }
+
+/* Buttons */
+.brow { display:flex; gap:9px; flex-wrap:wrap; margin-top:10px; }
+.btn {
+  padding:8px 18px; border:none; border-radius:8px;
+  font-size:.9rem; font-weight:600; cursor:pointer; transition:all .2s;
+}
+.bp { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
+.bp:hover { transform:translateY(-2px); box-shadow:0 4px 14px rgba(102,126,234,.4); }
+.bg { background:#6c757d; color:white; }
+.bg:hover { background:#5a6268; }
+.bn { background:#28a745; color:white; }
+.bn:hover { background:#218838; }
+.br { background:#dc3545; color:white; }
+.br:hover { background:#c82333; }
+.sm { padding:5px 10px; font-size:.78rem; }
+
+/* Results */
+.results {
+  background:#f0f7ff; padding:24px;
+  border-radius:12px; margin-top:24px;
+}
+.results h3 { color:#667eea; font-size:1.4rem; margin-bottom:14px; }
+.sinfo {
+  background:white; padding:14px; border-radius:8px; margin-bottom:14px;
+  display:flex; gap:26px; flex-wrap:wrap; box-shadow:0 2px 7px rgba(0,0,0,.05);
+}
+.si-lbl { font-size:.73rem; color:#888; text-transform:uppercase; letter-spacing:.4px; }
+.si-val { font-size:1rem; font-weight:700; color:#333; }
+.si-val.big { font-size:1.4rem; color:#667eea; }
+table.rt {
+  width:100%; border-collapse:collapse; background:white;
+  border-radius:8px; overflow:hidden; box-shadow:0 2px 9px rgba(0,0,0,.06);
+}
+table.rt th {
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  color:white; padding:10px 13px; text-align:left; font-weight:600;
+}
+table.rt td { padding:10px 13px; border-bottom:1px solid #e8e8e8; }
+table.rt tr:last-child td { border-bottom:none; }
+table.rt tr:hover td { background:#f8f0ff; }
+.co  { color:#888; font-size:.87rem; }
+.cs  { font-weight:700; color:#28a745; }
+.ck  { font-weight:700; color:#667eea; font-size:1.02rem; }
+.badge {
+  display:inline-block; padding:2px 7px; border-radius:10px;
+  font-size:.7rem; font-weight:bold;
+}
+.bl { background:#cce5ff; color:#004085; }
+.bd { background:#d4edda; color:#155724; }
+
+.hidden { display:none; }
+.notif {
+  position:fixed; top:18px; right:18px; background:#28a745; color:white;
+  padding:12px 20px; border-radius:8px; box-shadow:0 4px 18px rgba(0,0,0,.25);
+  font-weight:600; z-index:9999; animation:slin .3s ease-out;
+}
+@keyframes slin { from{transform:translateX(260px);opacity:0} to{transform:translateX(0);opacity:1} }
+@media(max-width:700px){
+  .panel{padding:15px;}
+  .header{padding:17px 18px;}
+  .header h1{font-size:1.5rem;}
+  .cfg-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🍳 Recipe Scaler Pro</h1>
+    <p>Scale multiple recipes · paste from Excel or type ingredients · smart unit conversion</p>
+  </div>
+  <div class="tabs-bar" id="tabsBar">
+    <button class="add-tab-btn" onclick="addRecipe()">＋</button>
+  </div>
+  <div id="panels"></div>
+</div>
+
+<script>
+// ─── Conversion tables ────────────────────────────────────────────────────────
+const CUP_TO_LBS = {
+  'all purpose flour':0.275,'bread flour':0.29,'cake flour':0.25,'flour':0.275,
+  'granulated sugar':0.44,'sugar':0.44,'brown sugar':0.48,'powdered sugar':0.28,
+  'confectioners sugar':0.28,'icing sugar':0.28,
+  'butter':0.5,'shortening':0.43,
+  'oil':0.48,'olive oil':0.48,'vegetable oil':0.47,
+  'water':0.522,'milk':0.54,'heavy cream':0.51,'cream':0.51,'buttermilk':0.54,
+  'honey':0.75,'maple syrup':0.71,'corn syrup':0.71,
+  'black beans':0.44,'beans':0.42,'chickpeas':0.43,'lentils':0.435,
+  'white rice':0.42,'brown rice':0.42,'rice':0.42,'basmati':0.42,
+  'rolled oats':0.18,'oats':0.18,
+  'cocoa powder':0.22,'cocoa':0.22,
+  'baking soda':0.57,'baking powder':0.46,
+  'kosher salt':0.29,'table salt':0.58,'salt':0.58,
+  'cornstarch':0.28,'cornmeal':0.43,
+  'almond flour':0.22,'breadcrumbs':0.265,'panko':0.14,
+  'parmesan':0.35,'cheese':0.26,
+  'nuts':0.28,'almonds':0.30,'walnuts':0.27,'pecans':0.25,
+  'chocolate chips':0.37,'raisins':0.36,
+  'default':0.5
+};
+const TSP_WEIGHT_G = {
+  'salt':5.7,'kosher salt':3.0,'baking soda':6.0,'baking powder':4.6,
+  'sugar':4.2,'flour':2.6,'cocoa':2.2,'pepper':2.3,
+  'cumin':2.0,'paprika':2.3,'cinnamon':2.6,'default':3.0
+};
+const LIQUID_KW = ['water','milk','cream','oil','juice','broth','stock','sauce',
+  'vinegar','wine','beer','soda','syrup','extract','vanilla','honey','buttermilk',
+  'whey','brine','coffee','tea','coconut milk','condensed','evaporated','rum',
+  'liqueur','lemon juice','lime juice','orange juice'];
+
+// Natural-language unit keywords (longest first to avoid partial matches)
+const NL_UNITS = [
+  ['tablespoons','tbsp'],['tablespoon','tbsp'],['tbsps','tbsp'],['tbsp','tbsp'],['tbl','tbsp'],['tb','tbsp'],
+  ['teaspoons','tsp'],['teaspoon','tsp'],['tsps','tsp'],['tsp','tsp'],
+  ['spoons','tbsp'],['spoon','tbsp'],
+  ['cups','cup'],['cup','cup'],
+  ['fluid ounces','floz'],['fluid oz','floz'],['fl oz','floz'],['floz','floz'],
+  ['ounces','oz'],['ounce','oz'],
+  ['pounds','lbs'],['pound','lbs'],['lbs','lbs'],['lb','lbs'],
+  ['kilograms','kg'],['kilogram','kg'],['kg','kg'],
+  ['grams','g'],['gram','g'],['gms','g'],['gm','g'],
+  ['milliliters','ml'],['millilitres','ml'],['ml','ml'],
+  ['gallons','gal'],['gallon','gal'],['gal','gal'],
+  ['quarts','qt'],['quart','qt'],['qt','qt'],['qts','qt'],
+  ['liters','l'],['litres','l'],['liter','l'],['litre','l'],
+  ['bunches','bunch'],['bunch','bunch'],
+  ['cloves','clove'],['clove','clove'],
+  ['sprigs','sprig'],['sprig','sprig'],
+  ['stalks','stalk'],['stalk','stalk'],
+  ['slices','slice'],['slice','slice'],
+  ['packs','count'],['pack','count'],['packets','count'],['packet','count'],
+  ['pieces','count'],['piece','count'],['pcs','count'],['pc','count'],
+  ['each','count'],['nos','count'],['no','count'],
+  ['handful','handful'],['handfuls','handful'],
+  ['pinches','pinch'],['pinch','pinch'],
+  ['dashes','dash'],['dash','dash'],
+  ['whole','count'],
+];
+
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+function isLiquid(name) {
+  const n = name.toLowerCase();
+  return LIQUID_KW.some(k => n.includes(k));
+}
+function getCupLbs(name) {
+  const n = name.toLowerCase();
+  for (const [k,v] of Object.entries(CUP_TO_LBS))
+    if (k !== 'default' && n.includes(k)) return v;
+  return CUP_TO_LBS.default;
+}
+function getTspG(name) {
+  const n = name.toLowerCase();
+  for (const [k,v] of Object.entries(TSP_WEIGHT_G))
+    if (k !== 'default' && n.includes(k)) return v;
+  return TSP_WEIGHT_G.default;
+}
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtQ(n) {
+  if (isNaN(n)||n===0) return '0';
+  const fracs=[[0.125,'⅛'],[0.25,'¼'],[0.333,'⅓'],[0.5,'½'],[0.667,'⅔'],[0.75,'¾']];
+  const whole=Math.floor(n), dec=n-whole;
+  for (const [d,sym] of fracs)
+    if (Math.abs(dec-d)<0.04) return whole>0?`${whole} ${sym}`:sym;
+  if (n>=100) return Math.round(n).toString();
+  if (n>=10)  return (Math.round(n*2)/2).toString();
+  if (n>=1)   return (Math.round(n*4)/4).toFixed(2).replace(/\.?0+$/,'');
+  return (Math.round(n*100)/100).toString();
+}
+
+function matchUnit(s) {
+  if (!s) return null;
+  s = s.toLowerCase().trim().replace(/[.,!]$/,'');
+  for (const [kw,mapped] of NL_UNITS)
+    if (s===kw || s.startsWith(kw+' ') || s.startsWith(kw+',') || s.endsWith(' '+kw))
+      return mapped;
+  return null;
+}
+
+function parseFrac(s) {
+  if (!s) return '';
+  s = String(s).trim();
+  const m = s.match(/^(\d+)\s+(\d+)\/(\d+)$/);
+  if (m) return (parseInt(m[1])+parseInt(m[2])/parseInt(m[3])).toString();
+  const f = s.match(/^(\d+)\/(\d+)$/);
+  if (f) return (parseInt(f[1])/parseInt(f[2])).toString();
+  return s.replace(/[^0-9.]/g,'');
+}
+
+function normalizeUnit(u) {
+  if (!u) return 'count';
+  // Normalize: lowercase, trim, collapse spaces, remove trailing punctuation
+  const raw = u.toLowerCase().trim().replace(/\s+/g,' ').replace(/[.,!]+$/,'');
+  // Check multi-word forms FIRST (before stripping spaces)
+  const multiMap = {
+    'fl oz':'floz','fluid oz':'floz','fluid ounce':'floz','fluid ounces':'floz',
+    'fl. oz':'floz','fl. oz.':'floz',
+    'oz (weight)':'oz','oz weight':'oz',
+    'piece / each':'count','pieces / each':'count',
+  };
+  if (multiMap[raw]) return multiMap[raw];
+  // Now strip non-alpha for single-word lookup
+  const s = raw.replace(/[^a-z]/g,'');
+  return ({
+    tsp:'tsp',teaspoon:'tsp',teaspoons:'tsp',tsps:'tsp',
+    tbsp:'tbsp',tablespoon:'tbsp',tablespoons:'tbsp',tbl:'tbsp',tb:'tbsp',tbs:'tbsp',
+    cup:'cup',cups:'cup',
+    floz:'floz',fluidoz:'floz',fluidounce:'floz',fluidounces:'floz',
+    ml:'ml',milliliter:'ml',milliliters:'ml',millilitre:'ml',millilitres:'ml',
+    l:'l',liter:'l',liters:'l',litre:'l',litres:'l',
+    oz:'oz',ounce:'oz',ounces:'oz',
+    lb:'lbs',lbs:'lbs',pound:'lbs',pounds:'lbs',
+    g:'g',gram:'g',grams:'g',gm:'g',gms:'g',
+    kg:'kg',kilogram:'kg',kilograms:'kg',
+    qt:'qt',quart:'qt',quarts:'qt',qts:'qt',
+    gal:'gal',gallon:'gal',gallons:'gal',
+    bunch:'bunch',bunches:'bunch',
+    clove:'clove',cloves:'clove',
+    sprig:'sprig',sprigs:'sprig',
+    stalk:'stalk',stalks:'stalk',
+    slice:'slice',slices:'slice',
+    piece:'count',pieces:'count',pc:'count',pcs:'count',each:'count',ea:'count',
+    pack:'count',packs:'count',packet:'count',packets:'count',
+    pinch:'pinch',pinches:'pinch',
+    dash:'dash',dashes:'dash',
+    handful:'handful',handfuls:'handful',
+    whole:'count',nos:'count',no:'count',
+    c:'cup',
+  })[s] || 'count';
+}
+
+// ─── Natural language line parser ─────────────────────────────────────────────
+// Handles:  "Jackfruit - 1 pack"  "Yogurt - 1/2 cup"  "Lemon juice - 1 quart"
+//           "Green chili: 30"  "Ginger: 20 palm size pieces"  "Mint - 3 bunches"
+//           "Shakthi masala - 200 gms"  "Tomato - 20"
+// Qualifier words after the unit (e.g. "palm size", "large sized", "pieces") are stripped
+const QUALIFIER_WORDS = /\b(large|small|medium|big|sized?|palm|size|fresh|dried|chopped|minced|sliced|diced|whole|ripe|raw|cooked|boneless|skinless|approx|approximately|about)\b/gi;
+
+function parseRecipeLine(line) {
+  line = line.trim().replace(/\s+/g,' ');
+  if (!line || line.length < 2) return null;
+
+  let namePart='', restPart='';
+
+  // Split on first dash/colon/hyphen separating name from qty
+  const dashM = line.match(/^(.+?)\s*[-–—:]\s*(.+)$/);
+  if (dashM) {
+    namePart = dashM[1].trim();
+    restPart = dashM[2].trim();
+  } else {
+    // No separator — find where digits start
+    const ni = line.search(/\d/);
+    if (ni > 0) {
+      namePart = line.slice(0,ni).trim().replace(/[\s,.\-]+$/,'');
+      restPart  = line.slice(ni).trim();
+    } else {
+      // No digits at all — peel off trailing unit word if present
+      const words = line.split(' ');
+      const last  = words[words.length-1].toLowerCase();
+      const uMatch = matchUnit(last);
+      if (uMatch && words.length > 1)
+        return { name:words.slice(0,-1).join(' '), qty:'1', unit:uMatch };
+      return { name:line, qty:'1', unit:'count' };
+    }
+  }
+
+  let qty='1', unit='count';
+  // Match qty (int, decimal, or fraction) then optional unit + qualifier text
+  const qm = restPart.match(/^((?:\d+\s+)?\d+\/\d+|\d+(?:\.\d+)?)\s*(.*)/);
+  if (qm) {
+    qty = parseFrac(qm[1].trim());
+    let uRaw = qm[2].trim().toLowerCase().replace(/[.,!]+$/,'');
+    let unitFound = null;
+    for (const [kw, mapped] of NL_UNITS) {
+      if (uRaw === kw || uRaw.startsWith(kw+' ') || uRaw.startsWith(kw+',')) {
+        unitFound = mapped; break;
+      }
+    }
+    if (!unitFound) {
+      const stripped = uRaw.replace(QUALIFIER_WORDS,'').trim().replace(/\s+/g,' ').split(' ')[0];
+      unitFound = matchUnit(stripped);
+    }
+    unit = unitFound || (uRaw ? 'count' : 'count');
+    if (!unitFound && uRaw) return namePart ? { name:namePart, qty, unit:'count', _rawUnit:uRaw } : null;
+  } else {
+    // No number — maybe just a unit word like "handful"
+    const uOnly = matchUnit(restPart.toLowerCase());
+    if (uOnly) { qty='1'; unit=uOnly; }
+    else       { qty='1'; unit='count'; }
+  }
+
+  return namePart ? { name:namePart, qty, unit } : null;
+}
+
+// ─── Unit conversion ──────────────────────────────────────────────────────────
+function convertUnit(qty, unit, name, liquid) {
+  if (['count','pinch','dash','handful','bunch','clove','sprig','stalk','slice'].includes(unit)) return {qty,unit};
+
+  if (liquid) {
+    let floz;
+    switch(unit){
+      case 'tsp':  floz=qty/6; break;
+      case 'tbsp': floz=qty/2; break;
+      case 'cup':  floz=qty*8; break;
+      case 'floz': floz=qty; break;
+      case 'oz':   floz=qty; break;
+      case 'ml':   floz=qty/29.574; break;
+      case 'l':    floz=qty*33.814; break;
+      case 'qt':   floz=qty*32; break;
+      case 'gal':  floz=qty*128; break;
+      case 'lbs':  floz=qty*15.34; break;
+      case 'g':    floz=qty/29.574; break;
+      case 'kg':   floz=qty*1000/29.574; break;
+      default: return {qty,unit};
+    }
+    if (floz<0.3)  return {qty:qty*(unit==='tsp'?1:3),unit:'tsp'};
+    if (floz<1)    return {qty:floz*2,unit:'tbsp'};
+    if (floz<8)    return {qty:floz,unit:'fl oz'};
+    if (floz<32)   return {qty:floz/8,unit:'cup'};
+    if (floz<128)  return {qty:floz/32,unit:'qt'};
+    return {qty:floz/128,unit:'gal'};
+  }
+
+  // Dry → lbs
+  let lbs;
+  switch(unit){
+    case 'tsp':  lbs=(qty*getTspG(name))/453.592; break;
+    case 'tbsp': lbs=(qty*3*getTspG(name))/453.592; break;
+    case 'cup':  lbs=qty*getCupLbs(name); break;
+    case 'oz':   lbs=qty/16; break;
+    case 'lbs':  lbs=qty; break;
+    case 'g':    lbs=qty/453.592; break;
+    case 'kg':   lbs=qty*2.20462; break;
+    case 'qt':   lbs=qty*2.086; break;  // dry quart ≈ 2.086 lbs (approx for dry goods)
+    case 'gal':  lbs=qty*8.345; break;
+    case 'floz': return {qty,unit:'fl oz'};
+    case 'ml':   lbs=qty/453.592; break;
+    default: return {qty,unit};
+  }
+  const oz=lbs*16;
+  if (oz<0.18){ const t=(lbs*453.592)/getTspG(name); return t<=1.5?{qty:t,unit:'tsp'}:{qty:t/3,unit:'tbsp'}; }
+  if (lbs<0.5) return {qty:oz,unit:'oz'};
+  return {qty:lbs,unit:'lbs'};
+}
+
+function dispUnit(unit,liq){
+  if ((unit==='oz'||unit==='floz')&&liq) return 'fl oz';
+  if (unit==='floz') return 'fl oz';
+  if (unit==='qt') return 'qt';
+  if (unit==='gal') return 'gal';
+  if (unit==='bunch') return 'bunch';
+  if (unit==='clove') return 'clove';
+  if (unit==='sprig') return 'sprig';
+  if (unit==='stalk') return 'stalk';
+  if (unit==='slice') return 'slice';
+  return unit;
+}
+
+// ─── Scaling factor ───────────────────────────────────────────────────────────
+const OZ_VAL={servings:1,counts:1,'16oz':16,'12oz':12,'8oz':8,'4oz':4};
+function calcSF(bc,bu,tc,tu){ return (tc*(OZ_VAL[tu]||1))/(bc*(OZ_VAL[bu]||1)); }
+
+// ─── App state ────────────────────────────────────────────────────────────────
+var recipes=[], activeId=null, rCount=0, iCnt={};
+
+function addRecipe(name){
+  var id=++rCount;
+  recipes.push({id,name:name||'Recipe '+id});
+  iCnt[id]=0;
+  _buildTab(id);
+  _buildPanel(id);
+  _activate(id);
+}
+function removeRecipe(id){
+  if(recipes.length===1) return;
+  recipes=recipes.filter(r=>r.id!==id);
+  document.getElementById('tab-'+id)?.remove();
+  document.getElementById('pnl-'+id)?.remove();
+  if(activeId===id) _activate(recipes[recipes.length-1].id);
+}
+function _activate(id){
+  activeId=id;
+  document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+id)?.classList.add('active');
+  document.getElementById('pnl-'+id)?.classList.add('active');
+}
+function renameTab(id){
+  var r=recipes.find(x=>x.id===id);
+  var n=prompt('Recipe name:',r.name);
+  if(n&&n.trim()){
+    r.name=n.trim();
+    document.querySelector('#tab-'+id+' .tname').textContent=r.name;
+    var inp=document.getElementById('rname-'+id);
+    if(inp) inp.value=r.name;
+  }
+}
+
+function _buildTab(id){
+  var bar=document.getElementById('tabsBar');
+  var add=bar.querySelector('.add-tab-btn');
+  var btn=document.createElement('button');
+  btn.className='tab-btn'; btn.id='tab-'+id;
+  btn.onclick=function(){ _activate(id); };
+  btn.innerHTML='<span class="tname" ondblclick="renameTab('+id+')">'+esc(recipes.find(r=>r.id===id).name)+'</span>'
+    +'<span class="tab-close" onclick="event.stopPropagation();removeRecipe('+id+')">✕</span>';
+  bar.insertBefore(btn,add);
+}
+
+function _unitOpts(sel){
+  var groups=[
+    [null,[['tsp','tsp'],['tbsp','tbsp'],['cup','cup'],['fl oz','floz'],['qt','qt'],['gal','gal'],['ml','ml'],['L','l']]],
+    [null,[['oz (weight)','oz'],['lbs','lbs'],['g','g'],['kg','kg']]],
+    [null,[['bunch','bunch'],['clove','clove'],['sprig','sprig'],['stalk','stalk'],['slice','slice'],['piece / each','count'],['handful','handful'],['pinch','pinch'],['dash','dash']]],
+  ];
+  var labels=['─ Volume ─','─ Weight ─','─ Count ─'];
+  return groups.map((g,i)=>'<option disabled>'+labels[i]+'</option>'
+    +g[1].map(([l,v])=>'<option value="'+v+'"'+(v===sel?' selected':'')+'>'+l+'</option>').join('')
+  ).join('');
+}
+
+function _buildPanel(id){
+  var rname=esc(recipes.find(r=>r.id===id)?.name||'');
+  var div=document.createElement('div');
+  div.className='panel'; div.id='pnl-'+id;
+  div.innerHTML=`
+  <div style="margin-bottom:22px">
+    <h2 class="section-title">Recipe Configuration</h2>
+    <div class="cfg-grid">
+      <div class="fg">
+        <label>Recipe Name</label>
+        <input type="text" id="rname-${id}" value="${rname}"
+          oninput="recipes.find(r=>r.id===${id}).name=this.value;document.querySelector('#tab-${id} .tname').textContent=this.value">
+      </div>
+      <div class="fg">
+        <label>Base Recipe Makes</label>
+        <div class="irow">
+          <input type="number" id="bc-${id}" value="12" min="0.01" step="0.01">
+          <select id="bu-${id}">
+            <option value="servings">Servings</option>
+            <option value="counts">Pieces</option>
+            <option value="16oz">16 oz servings</option>
+            <option value="12oz">12 oz servings</option>
+            <option value="8oz">8 oz servings</option>
+            <option value="4oz">4 oz servings</option>
+          </select>
+        </div>
+      </div>
+      <div class="fg">
+        <label>Target Amount Needed</label>
+        <div class="irow">
+          <input type="number" id="tc-${id}" value="24" min="0.01" step="0.01">
+          <select id="tu-${id}">
+            <option value="servings">Servings</option>
+            <option value="counts">Pieces</option>
+            <option value="16oz">16 oz servings</option>
+            <option value="12oz">12 oz servings</option>
+            <option value="8oz">8 oz servings</option>
+            <option value="4oz">4 oz servings</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-bottom:18px">
+    <h2 class="section-title">Ingredients</h2>
+    <div class="ing-wrap">
+      <div class="paste-hint">
+        📋 Paste from Excel or type free text<br>
+        <code>Flour &nbsp; 2 &nbsp; cups</code><br>
+        <code>Yogurt &nbsp; 0.5 &nbsp; cup</code>
+      </div>
+      <div class="tbl-wrap" tabindex="0" id="tw-${id}" onpaste="handlePaste(event,${id})">
+        <table class="it">
+          <thead><tr>
+            <th style="width:48%">Ingredient Name</th>
+            <th style="width:13%">Qty</th>
+            <th style="width:26%">Unit</th>
+            <th style="width:8%"></th>
+          </tr></thead>
+          <tbody id="ilist-${id}"></tbody>
+        </table>
+      </div>
+      <div class="brow">
+        <button class="btn bg sm" onclick="addRow(${id})">+ Add Row</button>
+        <button class="btn bg sm" onclick="clearRows(${id})">Clear All</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="brow" style="margin-bottom:18px">
+    <button class="btn bp" onclick="doScale(${id})">🔄 Scale Recipe</button>
+    <button class="btn bg"  onclick="resetPanel(${id})">↺ Reset</button>
+  </div>
+
+  <div id="res-${id}" class="results hidden">
+    <h3>📊 Scaled Results</h3>
+    <div class="sinfo" id="si-${id}"></div>
+    <table class="rt">
+      <thead><tr>
+        <th>Ingredient</th>
+        <th>Original</th><th>Scaled (same unit)</th><th>Kitchen Measurement</th>
+      </tr></thead>
+      <tbody id="rb-${id}"></tbody>
+    </table>
+    <div class="brow" style="margin-top:12px">
+      <button class="btn bn sm" onclick="copySheets(${id})">📊 Copy for Google Sheets</button>
+      <button class="btn bg sm" onclick="copyTxt(${id})">📄 Copy as Text</button>
+    </div>
+  </div>`;
+  document.getElementById('panels').appendChild(div);
+  addRow(id); // start with one blank row
+}
+
+// ─── Ingredient rows ──────────────────────────────────────────────────────────
+function addRow(rid, name, qty, unit, unknown){
+  name=name||''; qty=qty||''; unit=unit||'cup'; unknown=unknown||false;
+  var tbody=document.getElementById('ilist-'+rid);
+  var rowId='r'+rid+'-'+(iCnt[rid]++);
+  var tr=document.createElement('tr');
+  tr.id=rowId;
+  if(unknown) tr.style.background='#fff8e1';
+  var unitCell = unknown
+    ? `<input type="text" data-f="unit" data-custom="1" placeholder="e.g. bunch" value="${esc(unit)}" style="width:100%;border:2px solid #f0ad4e;border-radius:6px;padding:5px 7px;font-size:.85rem;background:#fff8e1" title="Unit not recognized — please verify">`
+    : `<select data-f="unit">${_unitOpts(unit)}</select>`;
+  tr.innerHTML=`
+    <td><input type="text" data-f="name" placeholder="Ingredient name" value="${esc(name)}"></td>
+    <td><input type="number" data-f="qty" placeholder="0" step="0.001" min="0" value="${qty}"></td>
+    <td>${unitCell}${unknown?'<span title="Unrecognized unit — please verify or type a known unit" style="color:#e67e00;font-size:.8rem;margin-left:4px">⚠️</span>':''}</td>
+    <td><button class="btn br sm" onclick="document.getElementById('${rowId}').remove()">✕</button></td>`;
+  tbody.appendChild(tr);
+}
+function clearRows(rid){ document.getElementById('ilist-'+rid).innerHTML=''; }
+
+// ─── Paste handler ────────────────────────────────────────────────────────────
+function handlePaste(e, rid){
+  var text=(e.clipboardData||window.clipboardData).getData('text');
+  if(!text.trim()) return;
+  e.preventDefault();
+
+  var raw=text.trim();
+  // Insert newlines before uppercase after lowercase (handles concatenated copy)
+  raw=raw.replace(/([a-z0-9.,])([A-Z])/g,'$1\n$2');
+  raw=raw.replace(/\.\s+([A-Z])/g,'\n$1');
+  // Split multiple "name - qty unit" entries concatenated on one line
+  // e.g. "curry leaves - 1 bunch coriander leaves - 3 bunches"
+  // Insert newline before a word sequence followed by " - number"
+  raw=raw.replace(/(\d+\s+\w+)\s+([a-zA-Z][a-zA-Z\s]+?)\s*-\s*(\d)/g,'$1\n$2 - $3');
+
+  var lines=raw.split(/\r?\n/).map(function(l){return l.trim();}).filter(function(l){return l.length>1;});
+
+  clearRows(rid);
+  var unrecognized=[];
+  lines.forEach(function(line){
+    var tabs=line.split('\t').map(function(p){return p.trim();});
+
+    if(tabs.length>=2){
+      // Detect Excel column order: could be Name|Qty|Unit or Qty|Unit|Name etc.
+      // Strategy: find which tab has a number, which has a unit keyword, which is the name
+
+      var qIdx=-1, uIdx=-1, nIdx=-1;
+
+      // Find quantity column (numeric or fraction)
+      for(var i=0;i<tabs.length;i++){
+        if(/^((?:\d+\s+)?\d+\/\d+|\d+(?:[.,]\d+)?)$/.test(tabs[i].trim())){
+          qIdx=i; break;
+        }
+      }
+
+      // Find unit column (matches a known unit keyword)
+      for(var i=0;i<tabs.length;i++){
+        if(i===qIdx) continue;
+        var candidate=tabs[i].toLowerCase().trim().replace(/[.,!]+$/,'');
+        var mapped=normalizeUnit(candidate);
+        // Only treat as unit column if it actually maps to something meaningful
+        if(mapped!=='count' || candidate==='count'||candidate==='piece'||candidate==='pieces'||candidate==='each'||candidate==='pc'||candidate==='pcs'){
+          uIdx=i; break;
+        }
+      }
+
+      // Name is the remaining column
+      for(var i=0;i<tabs.length;i++){
+        if(i!==qIdx && i!==uIdx){ nIdx=i; break; }
+      }
+
+      if(qIdx>=0 && nIdx>=0){
+        var n=tabs[nIdx]||'';
+        var q=parseFrac(tabs[qIdx]);
+        var rawUnit=uIdx>=0?tabs[uIdx]:'';
+        var u=rawUnit?normalizeUnit(rawUnit):'count';
+        var isUnknown=false;
+        if(u==='count' && rawUnit && !['count','piece','pieces','each','pc','pcs','pack','whole',''].includes(rawUnit.toLowerCase().trim())){
+          // Pass raw unit through as custom text, flag row
+          u=rawUnit; isUnknown=true;
+        }
+        if(n){ addRow(rid,n,q,u,isUnknown); return; }
+      }
+    }
+
+    // Fall back to natural language parser
+    var p=parseRecipeLine(line);
+    if(p){
+      var isUnknown=p.unit==='count' && p._rawUnit && !['count','piece','pieces','each','pc','pcs','pack','whole',''].includes(p._rawUnit.toLowerCase().trim());
+      addRow(rid,p.name,p.qty,isUnknown?p._rawUnit:p.unit,isUnknown);
+    }
+  });
+}
+
+// ─── Get ingredients ──────────────────────────────────────────────────────────
+function getIngredients(rid){
+  var rows=document.querySelectorAll('#ilist-'+rid+' tr');
+  var result=[];
+  rows.forEach(function(row){
+    var name=(row.querySelector('[data-f="name"]')||{}).value||'';
+    name=name.trim();
+    var qtyRaw=(row.querySelector('[data-f="qty"]')||{}).value||'';
+    var qty=parseFloat(qtyRaw);
+    var unitEl=row.querySelector('[data-f="unit"]');
+    var unit=(unitEl||{}).value||'count';
+    // Custom text inputs keep the raw string; normalize it one more time in case user typed a known unit
+    if(unitEl && unitEl.dataset.custom){
+      unit=normalizeUnit(unit.trim())==='count' && unit.trim() ? unit.trim() : normalizeUnit(unit.trim());
+    }
+    if(!name) return;
+    var liq=isLiquid(name);
+    var noQty=isNaN(qty)||qty<=0;
+    var isPantry=noQty||(unit==='count'&&noQty);
+    result.push({name,qty:noQty?1:qty,unit,liq,noQty:isPantry});
+  });
+  return result;
+}
+
+// ─── Scale ────────────────────────────────────────────────────────────────────
+function doScale(rid){
+  var bc=parseFloat(document.getElementById('bc-'+rid).value);
+  var bu=document.getElementById('bu-'+rid).value;
+  var tc=parseFloat(document.getElementById('tc-'+rid).value);
+  var tu=document.getElementById('tu-'+rid).value;
+  var rname=document.getElementById('rname-'+rid).value||recipes.find(function(r){return r.id===rid;})||'';
+  if(typeof rname==='object') rname=rname.name;
+
+  if(!bc||!tc){ alert('Enter base and target amounts.'); return; }
+  var ings=getIngredients(rid);
+  if(!ings.length){ alert('Add at least one ingredient.'); return; }
+
+  var sf=calcSF(bc,bu,tc,tu);
+
+  document.getElementById('si-'+rid).innerHTML=`
+    <div><div class="si-lbl">Recipe</div><div class="si-val">${esc(rname)}</div></div>
+    <div><div class="si-lbl">Original</div><div class="si-val">${bc} ${bu}</div></div>
+    <div><div class="si-lbl">Target</div><div class="si-val">${tc} ${tu}</div></div>
+    <div><div class="si-lbl">Scaling Factor</div><div class="si-val big">×${sf.toFixed(3)}</div></div>`;
+
+  var tbody=document.getElementById('rb-'+rid);
+  tbody.innerHTML='';
+  ings.forEach(function(ing){
+    var sq=ing.qty*sf;
+    var conv=convertUnit(sq,ing.unit,ing.name,ing.liq);
+    var badge=ing.liq?'<span class="badge bl">💧 Liquid</span>':'';
+    var origD=ing.noQty?'🧂 Pantry item':fmtQ(ing.qty)+' '+dispUnit(ing.unit,ing.liq);
+    var scalD=ing.noQty?'🧂 Pantry item':fmtQ(sq)+' '+dispUnit(ing.unit,ing.liq);
+    var convD=ing.noQty?'scale as needed':fmtQ(conv.qty)+' '+conv.unit;
+    var tr=document.createElement('tr');
+    tr.innerHTML=`<td><strong>${esc(ing.name)}</strong></td>`
+      +`<td class="co">${origD} ${badge}</td><td class="cs">${scalD}</td><td class="ck">${convD}</td>`;
+    tbody.appendChild(tr);
+  });
+
+  var sec=document.getElementById('res-'+rid);
+  sec.classList.remove('hidden');
+  sec.scrollIntoView({behavior:'smooth'});
+}
+
+// ─── Export ───────────────────────────────────────────────────────────────────
+function _exportData(rid){
+  var bc=parseFloat(document.getElementById('bc-'+rid).value);
+  var bu=document.getElementById('bu-'+rid).value;
+  var tc=parseFloat(document.getElementById('tc-'+rid).value);
+  var tu=document.getElementById('tu-'+rid).value;
+  return {sf:calcSF(bc,bu,tc,tu),bc,bu,tc,tu,
+    rname:document.getElementById('rname-'+rid).value||'',
+    ings:getIngredients(rid)};
+}
+function copySheets(rid){
+  var d=_exportData(rid);
+  var lines=['Ingredient\tKitchen Measurement'];
+  d.ings.forEach(function(ing){
+    var sq=ing.qty*d.sf;
+    var c=convertUnit(sq,ing.unit,ing.name,ing.liq);
+    var cv=ing.noQty?'Pantry item':fmtQ(c.qty)+' '+c.unit;
+    lines.push(ing.name+'\t'+cv);
+  });
+  _copy(lines.join('\n'),'✅ Copied for Google Sheets!');
+}
+function copyTxt(rid){
+  var d=_exportData(rid);
+  var lines=['SCALED RECIPE','='.repeat(46),'Recipe: '+d.rname,
+    'Original: '+d.bc+' '+d.bu+'  →  Target: '+d.tc+' '+d.tu,
+    'Scaling Factor: '+d.sf.toFixed(3)+'x','','INGREDIENTS:','-'.repeat(46)];
+  d.ings.forEach(function(ing){
+    var sq=ing.qty*d.sf;
+    var c=convertUnit(sq,ing.unit,ing.name,ing.liq);
+    var cv=ing.noQty?'(scale as needed)':(fmtQ(c.qty)+' '+c.unit);
+    lines.push(cv.padEnd(20)+' '+ing.name);
+  });
+  _copy(lines.join('\n'),'✅ Copied as text!');
+}
+function _copy(text,msg){
+  navigator.clipboard.writeText(text).then(function(){notify(msg);}).catch(function(){
+    var ta=document.createElement('textarea');
+    ta.value=text; ta.style.cssText='position:fixed;opacity:0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta); notify(msg);
+  });
+}
+function notify(msg){
+  document.querySelectorAll('.notif').forEach(function(n){n.remove();});
+  var el=document.createElement('div'); el.className='notif'; el.textContent=msg;
+  document.body.appendChild(el);
+  setTimeout(function(){el.remove();},3000);
+}
+function resetPanel(rid){
+  document.getElementById('bc-'+rid).value='12';
+  document.getElementById('tc-'+rid).value='24';
+  clearRows(rid); addRow(rid);
+  document.getElementById('res-'+rid).classList.add('hidden');
+}
+
+// ─── Init ─────────────────────────────────────────────────────────────────────
+addRecipe('Recipe 1');
+</script>
+</body>
+</html>
