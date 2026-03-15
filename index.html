@@ -6,157 +6,200 @@
 <title>Recipe Scaler Pro</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-  background: linear-gradient(135deg,#667eea,#764ba2);
-  min-height:100vh; padding:20px;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 400;
+  background: #f0f2f7;
+  min-height:100vh; padding:24px;
+  color: #1a1a2e;
 }
 .container {
-  max-width:1300px; margin:0 auto; background:white;
-  border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3); overflow:hidden;
+  max-width:1200px; margin:0 auto; background:white;
+  border-radius:20px; box-shadow:0 8px 40px rgba(0,0,0,.10); overflow:hidden;
 }
 .header {
-  background:linear-gradient(135deg,#667eea,#764ba2);
-  color:white; padding:26px 38px;
+  background: #1a1a2e;
+  color:white; padding:22px 36px; display:flex; align-items:center; gap:14px;
 }
-.header h1 { font-size:2rem; margin-bottom:5px; }
-.header p  { opacity:.9; font-size:.95rem; }
+.header-icon { font-size:1.6rem; }
+.header h1 { font-size:1.3rem; font-weight:600; letter-spacing:-.01em; }
+.header p  { opacity:.5; font-size:.8rem; margin-top:2px; font-weight:300; }
 
 /* Tabs */
 .tabs-bar {
-  display:flex; align-items:center; background:#f0f0f5;
-  border-bottom:2px solid #ddd; padding:0 20px; overflow-x:auto;
+  display:flex; align-items:center; background:#fafafa;
+  border-bottom:1px solid #ebebeb; padding:0 20px; overflow-x:auto;
 }
 .tab-btn {
-  padding:11px 18px; border:none; background:none; cursor:pointer;
-  font-size:.93rem; font-weight:600; color:#666;
-  border-bottom:3px solid transparent; white-space:nowrap; transition:all .2s;
+  padding:12px 16px; border:none; background:none; cursor:pointer;
+  font-size:.83rem; font-weight:500; color:#999; font-family:inherit;
+  border-bottom:2px solid transparent; white-space:nowrap; transition:all .15s;
 }
-.tab-btn.active { color:#667eea; border-bottom-color:#667eea; background:white; }
-.tab-btn:hover:not(.active) { color:#333; background:#e8e8f0; }
+.tab-btn.active { color:#1a1a2e; border-bottom-color:#1a1a2e; }
+.tab-btn:hover:not(.active) { color:#555; }
 .tab-close {
-  margin-left:7px; color:#bbb; cursor:pointer;
-  border-radius:50%; padding:1px 5px; font-size:.85rem;
+  margin-left:6px; color:#ccc; cursor:pointer;
+  border-radius:50%; padding:1px 4px; font-size:.75rem;
 }
-.tab-close:hover { background:#dc3545; color:white; }
+.tab-close:hover { background:#fee; color:#e53e3e; }
 .add-tab-btn {
-  padding:7px 15px; background:none; border:none;
-  cursor:pointer; font-size:1.4rem; color:#667eea; font-weight:bold;
+  padding:6px 14px; background:none; border:none; font-family:inherit;
+  cursor:pointer; font-size:1.1rem; color:#aaa; transition:color .15s;
 }
-.add-tab-btn:hover { transform:scale(1.2); display:inline-block; }
+.add-tab-btn:hover { color:#1a1a2e; }
 
 /* Panels */
-.panel { display:none; padding:28px 38px; }
+.panel { display:none; padding:28px 36px; }
 .panel.active { display:block; }
 .section-title {
-  font-size:1.15rem; color:#333; margin-bottom:14px;
-  padding-bottom:7px; border-bottom:3px solid #667eea;
+  font-size:.7rem; font-weight:600; color:#aaa; text-transform:uppercase;
+  letter-spacing:.1em; margin-bottom:14px;
 }
 
 /* Config grid */
 .cfg-grid {
   display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px; margin-bottom:22px;
+  gap:14px; margin-bottom:24px;
 }
 .fg { display:flex; flex-direction:column; }
-label { font-weight:600; color:#555; margin-bottom:5px; font-size:.87rem; }
+label { font-weight:500; color:#777; margin-bottom:5px; font-size:.78rem; letter-spacing:.02em; }
 input, select {
-  padding:9px 11px; border:2px solid #e0e0e0;
-  border-radius:8px; font-size:.92rem; transition:border-color .2s;
+  padding:8px 10px; border:1.5px solid #e8e8e8;
+  border-radius:8px; font-size:.88rem; font-family:inherit;
+  transition:border-color .15s; background:white; color:#1a1a2e;
 }
-input:focus, select:focus { outline:none; border-color:#667eea; }
-.irow { display:flex; gap:7px; }
+input:focus, select:focus { outline:none; border-color:#1a1a2e; }
+.irow { display:flex; gap:6px; }
 .irow input  { flex:1; }
-.irow select { flex:0 0 145px; }
+.irow select { flex:0 0 140px; }
 
 /* Ingredient table */
 .ing-wrap {
-  background:#f8f9fa; padding:18px; border-radius:12px; margin-bottom:18px;
+  background:#fafafa; padding:16px; border-radius:12px; margin-bottom:16px;
+  border:1px solid #ebebeb;
 }
 .paste-hint {
-  background:#e8f4fd; border-left:4px solid #2196f3;
-  padding:9px 13px; border-radius:4px; font-size:.84rem;
-  margin-bottom:13px; color:#1a5276; line-height:1.5;
+  background:#f5f5f5; border-left:3px solid #ccc;
+  padding:8px 12px; border-radius:4px; font-size:.78rem;
+  margin-bottom:12px; color:#888; line-height:1.6; font-family:'DM Mono',monospace;
 }
 .tbl-wrap { overflow-x:auto; outline:none; }
 table.it {
   width:100%; border-collapse:collapse; background:white;
-  border-radius:8px; overflow:hidden; font-size:.88rem; min-width:500px;
+  border-radius:8px; overflow:hidden; font-size:.84rem; min-width:500px;
+  border:1px solid #ebebeb;
 }
 table.it th {
-  background:#667eea; color:white; padding:9px 11px;
-  text-align:left; font-weight:600;
+  background:#f5f5f5; color:#888; padding:8px 10px;
+  text-align:left; font-weight:600; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em;
+  border-bottom:1px solid #ebebeb;
 }
 table.it td {
-  padding:6px 8px; border-bottom:1px solid #eee; vertical-align:middle;
+  padding:6px 8px; border-bottom:1px solid #f5f5f5; vertical-align:middle;
 }
 table.it tr:last-child td { border-bottom:none; }
-table.it tr:hover td { background:#f4f0ff; }
-table.it input[type=text]   { min-width:120px; width:100%; }
-table.it input[type=number] { width:72px; }
-table.it select { font-size:.85rem; padding:5px 7px; }
+table.it tr:hover td { background:#fafafa; }
+table.it input[type=text]   { min-width:120px; width:100%; border-color:#eee; }
+table.it input[data-f="qty"] { width:90px; border-color:#eee; }
+table.it select { font-size:.82rem; padding:5px 6px; border-color:#eee; }
 
 /* Buttons */
-.brow { display:flex; gap:9px; flex-wrap:wrap; margin-top:10px; }
+.brow { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
 .btn {
-  padding:8px 18px; border:none; border-radius:8px;
-  font-size:.9rem; font-weight:600; cursor:pointer; transition:all .2s;
+  padding:8px 16px; border:none; border-radius:8px; font-family:inherit;
+  font-size:.83rem; font-weight:500; cursor:pointer; transition:all .15s;
 }
-.bp { background:linear-gradient(135deg,#667eea,#764ba2); color:white; }
-.bp:hover { transform:translateY(-2px); box-shadow:0 4px 14px rgba(102,126,234,.4); }
-.bg { background:#6c757d; color:white; }
-.bg:hover { background:#5a6268; }
-.bn { background:#28a745; color:white; }
-.bn:hover { background:#218838; }
-.br { background:#dc3545; color:white; }
-.br:hover { background:#c82333; }
-.sm { padding:5px 10px; font-size:.78rem; }
+.bp { background:#1a1a2e; color:white; }
+.bp:hover { background:#2d2d4a; }
+.bg { background:#f0f0f0; color:#555; }
+.bg:hover { background:#e5e5e5; }
+.bn { background:#e6f7ee; color:#1a7a45; border:1px solid #b8e8cd; }
+.bn:hover { background:#d0f0df; }
+.br { background:#fee; color:#c0392b; border:1px solid #fcc; }
+.br:hover { background:#fdd; }
+.sm { padding:5px 10px; font-size:.76rem; }
 
 /* Results */
 .results {
-  background:#f0f7ff; padding:24px;
-  border-radius:12px; margin-top:24px;
+  background:#fafafa; padding:22px; border-radius:14px; margin-top:22px;
+  border:1px solid #ebebeb;
 }
-.results h3 { color:#667eea; font-size:1.4rem; margin-bottom:14px; }
+.results-header {
+  font-size:.7rem; font-weight:600; color:#aaa; text-transform:uppercase;
+  letter-spacing:.1em; margin-bottom:14px;
+}
 .sinfo {
-  background:white; padding:14px; border-radius:8px; margin-bottom:14px;
-  display:flex; gap:26px; flex-wrap:wrap; box-shadow:0 2px 7px rgba(0,0,0,.05);
+  background:white; padding:12px 16px; border-radius:8px; margin-bottom:14px;
+  display:flex; gap:24px; flex-wrap:wrap; border:1px solid #ebebeb;
 }
-.si-lbl { font-size:.73rem; color:#888; text-transform:uppercase; letter-spacing:.4px; }
-.si-val { font-size:1rem; font-weight:700; color:#333; }
-.si-val.big { font-size:1.4rem; color:#667eea; }
+.si-lbl { font-size:.68rem; color:#bbb; text-transform:uppercase; letter-spacing:.05em; }
+.si-val { font-size:.92rem; font-weight:500; color:#1a1a2e; margin-top:2px; }
+.si-val.big { font-size:1.3rem; font-weight:600; color:#1a1a2e; }
 table.rt {
   width:100%; border-collapse:collapse; background:white;
-  border-radius:8px; overflow:hidden; box-shadow:0 2px 9px rgba(0,0,0,.06);
+  border-radius:8px; overflow:hidden; border:1px solid #ebebeb;
 }
 table.rt th {
-  background:linear-gradient(135deg,#667eea,#764ba2);
-  color:white; padding:10px 13px; text-align:left; font-weight:600;
+  background:#f5f5f5; color:#888; padding:8px 12px; text-align:left;
+  font-weight:600; font-size:.7rem; text-transform:uppercase; letter-spacing:.06em;
+  border-bottom:1px solid #ebebeb;
 }
-table.rt td { padding:10px 13px; border-bottom:1px solid #e8e8e8; }
+table.rt td { padding:9px 12px; border-bottom:1px solid #f5f5f5; font-size:.86rem; }
 table.rt tr:last-child td { border-bottom:none; }
-table.rt tr:hover td { background:#f8f0ff; }
-.co  { color:#888; font-size:.87rem; }
-.cs  { font-weight:700; color:#28a745; }
-.ck  { font-weight:700; color:#667eea; font-size:1.02rem; }
-.badge {
-  display:inline-block; padding:2px 7px; border-radius:10px;
-  font-size:.7rem; font-weight:bold;
+table.rt tr:hover td { background:#fafafa; }
+.ing-name  { color:#1a1a2e; font-weight:500; }
+.col-orig  { color:#bbb; font-family:'DM Mono',monospace; font-size:.8rem; }
+.col-scaled{ color:#555; font-family:'DM Mono',monospace; font-size:.8rem; }
+.col-kitchen{ color:#1a7a45; font-family:'DM Mono',monospace; font-size:.86rem; font-weight:500; }
+.liq-badge {
+  display:inline-block; padding:1px 6px; border-radius:4px; margin-left:5px;
+  font-size:.65rem; font-weight:600; background:#e8f4fd; color:#2980b9;
+  text-transform:uppercase; letter-spacing:.04em;
 }
-.bl { background:#cce5ff; color:#004085; }
-.bd { background:#d4edda; color:#155724; }
+
+/* Tally validation */
+.tally {
+  margin-top:14px; padding:14px 16px; background:white;
+  border-radius:8px; border:1px solid #ebebeb;
+}
+.tally-row {
+  display:flex; justify-content:space-between; align-items:baseline;
+  padding:4px 0; font-size:.84rem; border-bottom:1px solid #f5f5f5;
+}
+.tally-row:last-child { border-bottom:none; padding-top:8px; }
+.tally-label { color:#888; }
+.tally-val { font-family:'DM Mono',monospace; font-weight:500; color:#1a1a2e; }
+.tally-status { font-weight:500; flex-direction:column; gap:4px; }
+.tally-hint { font-size:.72rem; color:#aaa; font-weight:400; }
+.tally-skipped { font-size:.72rem; color:#bbb; margin-top:6px; font-style:italic; }
+
+/* Conversion legend */
+.legend {
+  margin-top:14px; padding:12px 16px; background:white;
+  border-radius:8px; border:1px solid #ebebeb;
+}
+.legend-title {
+  font-size:.68rem; font-weight:600; color:#bbb; text-transform:uppercase;
+  letter-spacing:.08em; margin-bottom:8px;
+}
+.legend-item {
+  display:inline-block; margin:3px 6px 3px 0;
+  padding:3px 10px; background:#f5f5f5; border-radius:20px;
+  font-size:.76rem; color:#555; font-family:'DM Mono',monospace;
+}
 
 .hidden { display:none; }
 .notif {
-  position:fixed; top:18px; right:18px; background:#28a745; color:white;
-  padding:12px 20px; border-radius:8px; box-shadow:0 4px 18px rgba(0,0,0,.25);
-  font-weight:600; z-index:9999; animation:slin .3s ease-out;
+  position:fixed; top:16px; right:16px; background:#1a1a2e; color:white;
+  padding:10px 18px; border-radius:8px; box-shadow:0 4px 20px rgba(0,0,0,.2);
+  font-size:.83rem; font-weight:500; z-index:9999; animation:slin .2s ease-out;
 }
-@keyframes slin { from{transform:translateX(260px);opacity:0} to{transform:translateX(0);opacity:1} }
+@keyframes slin { from{transform:translateY(-10px);opacity:0} to{transform:translateY(0);opacity:1} }
 @media(max-width:700px){
   .panel{padding:15px;}
-  .header{padding:17px 18px;}
-  .header h1{font-size:1.5rem;}
+  .header{padding:16px 18px;}
+  .header h1{font-size:1.1rem;}
   .cfg-grid{grid-template-columns:1fr;}
 }
 </style>
@@ -164,8 +207,11 @@ table.rt tr:hover td { background:#f8f0ff; }
 <body>
 <div class="container">
   <div class="header">
-    <h1>🍳 Recipe Scaler Pro</h1>
-    <p>Scale multiple recipes · paste from Excel or type ingredients · smart unit conversion</p>
+    <div class="header-icon">🍳</div>
+    <div>
+      <h1>Recipe Scaler Pro</h1>
+      <p>Scale multiple recipes · paste from Excel · smart unit conversion</p>
+    </div>
   </div>
   <div class="tabs-bar" id="tabsBar">
     <button class="add-tab-btn" onclick="addRecipe()">＋</button>
@@ -201,10 +247,43 @@ const TSP_WEIGHT_G = {
   'sugar':4.2,'flour':2.6,'cocoa':2.2,'pepper':2.3,
   'cumin':2.0,'paprika':2.3,'cinnamon':2.6,'default':3.0
 };
+// Produce & common count items: lbs per single piece
+const COUNT_TO_LBS = {
+  'onion':0.5,'onions':0.5,
+  'tomato':0.33,'tomatoes':0.33,
+  'lemon':0.25,'lemons':0.25,
+  'lime':0.12,'limes':0.12,
+  'orange':0.5,'oranges':0.5,
+  'apple':0.44,'apples':0.44,
+  'banana':0.27,'bananas':0.27,
+  'potato':0.44,'potatoes':0.44,
+  'sweet potato':0.44,
+  'carrot':0.2,'carrots':0.2,
+  'bell pepper':0.33,'pepper':0.33,
+  'jalapeño':0.05,'jalapeno':0.05,
+  'green chili':0.02,'green chilli':0.02,'green chillies':0.02,'chili':0.02,
+  'garlic clove':0.01,'garlic':0.01,
+  'shallot':0.1,'shallots':0.1,
+  'egg':0.13,'eggs':0.13,
+  'avocado':0.44,'avocados':0.44,
+  'mango':0.75,'mangoes':0.75,
+  'cucumber':0.66,'cucumbers':0.66,
+  'zucchini':0.5,'zucchinis':0.5,
+  'eggplant':1.0,'eggplants':1.0,
+  'beet':0.44,'beets':0.44,
+  'turnip':0.5,
+};
+function getCountLbs(name) {
+  const n = name.toLowerCase();
+  for (const [k,v] of Object.entries(COUNT_TO_LBS))
+    if (n.includes(k)) return v;
+  return null; // null = no known produce weight, keep as count
+}
 const LIQUID_KW = ['water','milk','cream','oil','juice','broth','stock','sauce',
   'vinegar','wine','beer','soda','syrup','extract','vanilla','honey','buttermilk',
   'whey','brine','coffee','tea','coconut milk','condensed','evaporated','rum',
-  'liqueur','lemon juice','lime juice','orange juice'];
+  'liqueur','lemon juice','lime juice','orange juice',
+  'yogurt','curd','lassi','kefir','buttermilk','whipping cream'];
 
 // Natural-language unit keywords (longest first to avoid partial matches)
 const NL_UNITS = [
@@ -226,7 +305,7 @@ const NL_UNITS = [
   ['sprigs','sprig'],['sprig','sprig'],
   ['stalks','stalk'],['stalk','stalk'],
   ['slices','slice'],['slice','slice'],
-  ['packs','count'],['pack','count'],['packets','count'],['packet','count'],
+  ['packs','pack'],['pack','pack'],['packets','pack'],['packet','pack'],
   ['pieces','count'],['piece','count'],['pcs','count'],['pc','count'],
   ['each','count'],['nos','count'],['no','count'],
   ['handful','handful'],['handfuls','handful'],
@@ -258,14 +337,10 @@ function esc(s) {
 }
 function fmtQ(n) {
   if (isNaN(n)||n===0) return '0';
-  const fracs=[[0.125,'⅛'],[0.25,'¼'],[0.333,'⅓'],[0.5,'½'],[0.667,'⅔'],[0.75,'¾']];
-  const whole=Math.floor(n), dec=n-whole;
-  for (const [d,sym] of fracs)
-    if (Math.abs(dec-d)<0.04) return whole>0?`${whole} ${sym}`:sym;
   if (n>=100) return Math.round(n).toString();
-  if (n>=10)  return (Math.round(n*2)/2).toString();
-  if (n>=1)   return (Math.round(n*4)/4).toFixed(2).replace(/\.?0+$/,'');
-  return (Math.round(n*100)/100).toString();
+  if (n>=10)  return (Math.round(n*10)/10).toFixed(1).replace(/\.0$/,'');
+  if (n>=1)   return (Math.round(n*100)/100).toFixed(2).replace(/\.?0+$/,'');
+  return (Math.round(n*1000)/1000).toFixed(3).replace(/\.?0+$/,'');
 }
 
 function matchUnit(s) {
@@ -284,6 +359,8 @@ function parseFrac(s) {
   if (m) return (parseInt(m[1])+parseInt(m[2])/parseInt(m[3])).toString();
   const f = s.match(/^(\d+)\/(\d+)$/);
   if (f) return (parseInt(f[1])/parseInt(f[2])).toString();
+  // Handle leading-dot decimals: .5 → 0.5
+  if (/^\.\d+$/.test(s)) return ('0'+s);
   return s.replace(/[^0-9.]/g,'');
 }
 
@@ -320,7 +397,7 @@ function normalizeUnit(u) {
     stalk:'stalk',stalks:'stalk',
     slice:'slice',slices:'slice',
     piece:'count',pieces:'count',pc:'count',pcs:'count',each:'count',ea:'count',
-    pack:'count',packs:'count',packet:'count',packets:'count',
+    pack:'pack',packs:'pack',packet:'pack',packets:'pack',
     pinch:'pinch',pinches:'pinch',
     dash:'dash',dashes:'dash',
     handful:'handful',handfuls:'handful',
@@ -330,10 +407,6 @@ function normalizeUnit(u) {
 }
 
 // ─── Natural language line parser ─────────────────────────────────────────────
-// Handles:  "Jackfruit - 1 pack"  "Yogurt - 1/2 cup"  "Lemon juice - 1 quart"
-//           "Green chili: 30"  "Ginger: 20 palm size pieces"  "Mint - 3 bunches"
-//           "Shakthi masala - 200 gms"  "Tomato - 20"
-// Qualifier words after the unit (e.g. "palm size", "large sized", "pieces") are stripped
 const QUALIFIER_WORDS = /\b(large|small|medium|big|sized?|palm|size|fresh|dried|chopped|minced|sliced|diced|whole|ripe|raw|cooked|boneless|skinless|approx|approximately|about)\b/gi;
 
 function parseRecipeLine(line) {
@@ -342,19 +415,23 @@ function parseRecipeLine(line) {
 
   let namePart='', restPart='';
 
-  // Split on first dash/colon/hyphen separating name from qty
+  // Split on first dash/colon/em-dash separating name from qty
+  // Use a lookahead so "Fried Onion /Barista" (slash in name, no qty after) doesn't split on /
   const dashM = line.match(/^(.+?)\s*[-–—:]\s*(.+)$/);
   if (dashM) {
     namePart = dashM[1].trim();
     restPart = dashM[2].trim();
   } else {
-    // No separator — find where digits start
-    const ni = line.search(/\d/);
+    // No separator — find where a number (including leading-dot decimals) starts
+    const ni = line.search(/(?<!\w)\d|(?<!\d)\.\d/);
     if (ni > 0) {
-      namePart = line.slice(0,ni).trim().replace(/[\s,.\-]+$/,'');
+      namePart = line.slice(0,ni).trim().replace(/[\s,.\-\/]+$/,'');
       restPart  = line.slice(ni).trim();
+    } else if (ni === 0) {
+      // Line starts with a number — no name, skip
+      return null;
     } else {
-      // No digits at all — peel off trailing unit word if present
+      // No digits — peel off trailing unit word if present
       const words = line.split(' ');
       const last  = words[words.length-1].toLowerCase();
       const uMatch = matchUnit(last);
@@ -365,8 +442,8 @@ function parseRecipeLine(line) {
   }
 
   let qty='1', unit='count';
-  // Match qty (int, decimal, or fraction) then optional unit + qualifier text
-  const qm = restPart.match(/^((?:\d+\s+)?\d+\/\d+|\d+(?:\.\d+)?)\s*(.*)/);
+  // Match qty: supports  1  1.5  .5  .25  1/2  1 1/2  — leading dot decimals included
+  const qm = restPart.match(/^((?:\d+\s+)?\d+\/\d+|\d*\.?\d+)\s*(.*)/);
   if (qm) {
     qty = parseFrac(qm[1].trim());
     let uRaw = qm[2].trim().toLowerCase().replace(/[.,!]+$/,'');
@@ -380,10 +457,9 @@ function parseRecipeLine(line) {
       const stripped = uRaw.replace(QUALIFIER_WORDS,'').trim().replace(/\s+/g,' ').split(' ')[0];
       unitFound = matchUnit(stripped);
     }
-    unit = unitFound || (uRaw ? 'count' : 'count');
+    unit = unitFound || 'count';
     if (!unitFound && uRaw) return namePart ? { name:namePart, qty, unit:'count', _rawUnit:uRaw } : null;
   } else {
-    // No number — maybe just a unit word like "handful"
     const uOnly = matchUnit(restPart.toLowerCase());
     if (uOnly) { qty='1'; unit=uOnly; }
     else       { qty='1'; unit='count'; }
@@ -394,7 +470,18 @@ function parseRecipeLine(line) {
 
 // ─── Unit conversion ──────────────────────────────────────────────────────────
 function convertUnit(qty, unit, name, liquid) {
-  if (['count','pinch','dash','handful','bunch','clove','sprig','stalk','slice'].includes(unit)) return {qty,unit};
+  // Count: try produce weight lookup, otherwise pass through
+  if (unit === 'count') {
+    const lbsEach = getCountLbs(name);
+    if (lbsEach !== null) {
+      const lbs = qty * lbsEach;
+      const oz = lbs * 16;
+      if (lbs < 0.5) return {qty: oz, unit: 'oz'};
+      return {qty: lbs, unit: 'lbs'};
+    }
+    return {qty, unit};
+  }
+  if (['pinch','dash','handful','bunch','clove','sprig','stalk','slice','pack'].includes(unit)) return {qty,unit};
 
   if (liquid) {
     let floz;
@@ -446,17 +533,91 @@ function convertUnit(qty, unit, name, liquid) {
 function dispUnit(unit,liq){
   if ((unit==='oz'||unit==='floz')&&liq) return 'fl oz';
   if (unit==='floz') return 'fl oz';
-  if (unit==='qt') return 'qt';
-  if (unit==='gal') return 'gal';
-  if (unit==='bunch') return 'bunch';
-  if (unit==='clove') return 'clove';
-  if (unit==='sprig') return 'sprig';
-  if (unit==='stalk') return 'stalk';
-  if (unit==='slice') return 'slice';
   return unit;
 }
+const PLURAL_MAP = {
+  'tsp':'tsp','tbsp':'tbsp','cup':'cups','fl oz':'fl oz',
+  'qt':'qts','gal':'gal','ml':'ml','l':'l',
+  'oz':'oz','lbs':'lbs','g':'g','kg':'kg',
+  'bunch':'bunches','clove':'cloves','sprig':'sprigs',
+  'stalk':'stalks','slice':'slices','pack':'packs',
+  'count':'','pinch':'pinches','dash':'dashes','handful':'handfuls',
+};
+function pluralUnit(unit, qty) {
+  if (unit === 'count') return ''; // count: just show the number
+  if (qty <= 1) return unit;
+  return PLURAL_MAP[unit] !== undefined ? PLURAL_MAP[unit] : (unit+'s');
+}
+function fmtQU(qty, unit, liq) {
+  const u = dispUnit(unit, liq);
+  const pu = pluralUnit(u, qty);
+  return fmtQ(qty) + (pu ? ' '+pu : '');
+}
+// For kitchen measure column: show weight conversion for produce, else show count with label
+function fmtConv(conv, ing) {
+  if (ing.noQty) return 'scale as needed';
+  if (conv.unit === 'count') {
+    // No produce weight known — show as "X (count)"
+    const n = fmtQ(conv.qty);
+    return n + ' (count)';
+  }
+  return fmtQU(conv.qty, conv.unit, ing.liq);
+}
 
-// ─── Scaling factor ───────────────────────────────────────────────────────────
+// Cooking expansion factors — cooked weight / dry weight
+// e.g. rice absorbs water and roughly doubles in weight when cooked
+const COOK_EXPANSION = {
+  'rice':2.0,'basmati':2.0,'white rice':2.0,'brown rice':2.2,'jasmine rice':2.0,
+  'soaked rice':2.0,'soaked basmati':2.0,
+  'quinoa':2.8,
+  'lentils':2.5,'red lentils':2.5,'green lentils':2.5,'dal':2.5,
+  'chickpeas':2.5,'black beans':2.5,'kidney beans':2.5,'beans':2.5,
+  'oats':2.0,'rolled oats':2.0,'oatmeal':2.0,
+  'pasta':2.3,'spaghetti':2.3,'noodles':2.3,
+  'barley':2.5,
+};
+function getCookExpansion(name) {
+  const n = name.toLowerCase();
+  for (const [k,v] of Object.entries(COOK_EXPANSION))
+    if (n.includes(k)) return v;
+  return 1.0; // no expansion — raw/dry weight used as-is
+}
+function toLbs(qty, unit, liquid, name) {
+  name = name || '';
+  if (['count','pack','bunch','clove','sprig','stalk','slice','pinch','dash','handful'].includes(unit)) return null;
+  var lbs;
+  if (liquid) {
+    var floz;
+    switch(unit){
+      case 'tsp':   floz=qty/6; break;
+      case 'tbsp':  floz=qty/2; break;
+      case 'cup':   floz=qty*8; break;
+      case 'fl oz': floz=qty; break;
+      case 'oz':    floz=qty; break;
+      case 'qt':    floz=qty*32; break;
+      case 'gal':   floz=qty*128; break;
+      case 'ml':    floz=qty/29.574; break;
+      case 'l':     floz=qty*33.814; break;
+      case 'lbs':   lbs=qty; break;
+      default: return null;
+    }
+    if(lbs===undefined) lbs=floz*0.0652;
+  } else {
+    switch(unit){
+      case 'oz':   lbs=qty/16; break;
+      case 'lbs':  lbs=qty; break;
+      case 'g':    lbs=qty/453.592; break;
+      case 'kg':   lbs=qty*2.20462; break;
+      case 'tsp':  lbs=(qty*3)/453.592; break;
+      case 'tbsp': lbs=(qty*9)/453.592; break;
+      case 'fl oz':lbs=qty*0.0652; break;
+      case 'qt':   lbs=qty*2.086; break;
+      case 'gal':  lbs=qty*8.345; break;
+      default: return null;
+    }
+  }
+  return lbs * getCookExpansion(name);
+}
 const OZ_VAL={servings:1,counts:1,'16oz':16,'12oz':12,'8oz':8,'4oz':4};
 function calcSF(bc,bu,tc,tu){ return (tc*(OZ_VAL[tu]||1))/(bc*(OZ_VAL[bu]||1)); }
 
@@ -511,7 +672,7 @@ function _unitOpts(sel){
   var groups=[
     [null,[['tsp','tsp'],['tbsp','tbsp'],['cup','cup'],['fl oz','floz'],['qt','qt'],['gal','gal'],['ml','ml'],['L','l']]],
     [null,[['oz (weight)','oz'],['lbs','lbs'],['g','g'],['kg','kg']]],
-    [null,[['bunch','bunch'],['clove','clove'],['sprig','sprig'],['stalk','stalk'],['slice','slice'],['piece / each','count'],['handful','handful'],['pinch','pinch'],['dash','dash']]],
+    [null,[['bunch','bunch'],['clove','clove'],['sprig','sprig'],['stalk','stalk'],['slice','slice'],['count','count'],['pack','pack'],['handful','handful'],['pinch','pinch'],['dash','dash']]],
   ];
   var labels=['─ Volume ─','─ Weight ─','─ Count ─'];
   return groups.map((g,i)=>'<option disabled>'+labels[i]+'</option>'
@@ -535,26 +696,26 @@ function _buildPanel(id){
       <div class="fg">
         <label>Base Recipe Makes</label>
         <div class="irow">
-          <input type="number" id="bc-${id}" value="12" min="0.01" step="0.01">
+          <input type="number" id="bc-${id}" value="5" min="0.01" step="0.01">
           <select id="bu-${id}">
             <option value="servings">Servings</option>
             <option value="counts">Pieces</option>
             <option value="16oz">16 oz servings</option>
-            <option value="12oz">12 oz servings</option>
+            <option value="12oz" selected>12 oz servings</option>
             <option value="8oz">8 oz servings</option>
             <option value="4oz">4 oz servings</option>
           </select>
         </div>
       </div>
       <div class="fg">
-        <label>Target Amount Needed</label>
+        <label>Target Quantity Needed</label>
         <div class="irow">
-          <input type="number" id="tc-${id}" value="24" min="0.01" step="0.01">
+          <input type="number" id="tc-${id}" value="60" min="0.01" step="0.01">
           <select id="tu-${id}">
             <option value="servings">Servings</option>
             <option value="counts">Pieces</option>
             <option value="16oz">16 oz servings</option>
-            <option value="12oz">12 oz servings</option>
+            <option value="12oz" selected>12 oz servings</option>
             <option value="8oz">8 oz servings</option>
             <option value="4oz">4 oz servings</option>
           </select>
@@ -595,17 +756,19 @@ function _buildPanel(id){
   </div>
 
   <div id="res-${id}" class="results hidden">
-    <h3>📊 Scaled Results</h3>
+    <div class="results-header">Scaled Results</div>
     <div class="sinfo" id="si-${id}"></div>
     <table class="rt">
       <thead><tr>
         <th>Ingredient</th>
-        <th>Original</th><th>Scaled (same unit)</th><th>Kitchen Measurement</th>
+        <th>Original</th><th>Scaled</th><th>Kitchen Measure</th>
       </tr></thead>
       <tbody id="rb-${id}"></tbody>
     </table>
+    <div id="legend-${id}" class="legend" style="display:none"></div>
+    <div id="tally-${id}" class="tally" style="display:none"></div>
     <div class="brow" style="margin-top:12px">
-      <button class="btn bn sm" onclick="copySheets(${id})">📊 Copy for Google Sheets</button>
+      <button class="btn bn sm" onclick="copySheets(${id})">📊 Copy for Sheets</button>
       <button class="btn bg sm" onclick="copyTxt(${id})">📄 Copy as Text</button>
     </div>
   </div>`;
@@ -615,7 +778,7 @@ function _buildPanel(id){
 
 // ─── Ingredient rows ──────────────────────────────────────────────────────────
 function addRow(rid, name, qty, unit, unknown){
-  name=name||''; qty=qty||''; unit=unit||'cup'; unknown=unknown||false;
+  name=name||''; qty=qty||''; unit=unit||'count'; unknown=unknown||false;
   var tbody=document.getElementById('ilist-'+rid);
   var rowId='r'+rid+'-'+(iCnt[rid]++);
   var tr=document.createElement('tr');
@@ -626,7 +789,7 @@ function addRow(rid, name, qty, unit, unknown){
     : `<select data-f="unit">${_unitOpts(unit)}</select>`;
   tr.innerHTML=`
     <td><input type="text" data-f="name" placeholder="Ingredient name" value="${esc(name)}"></td>
-    <td><input type="number" data-f="qty" placeholder="0" step="0.001" min="0" value="${qty}"></td>
+    <td><input type="text" inputmode="decimal" data-f="qty" placeholder="0" style="width:90px" value="${qty}"></td>
     <td>${unitCell}${unknown?'<span title="Unrecognized unit — please verify or type a known unit" style="color:#e67e00;font-size:.8rem;margin-left:4px">⚠️</span>':''}</td>
     <td><button class="btn br sm" onclick="document.getElementById('${rowId}').remove()">✕</button></td>`;
   tbody.appendChild(tr);
@@ -643,10 +806,9 @@ function handlePaste(e, rid){
   // Insert newlines before uppercase after lowercase (handles concatenated copy)
   raw=raw.replace(/([a-z0-9.,])([A-Z])/g,'$1\n$2');
   raw=raw.replace(/\.\s+([A-Z])/g,'\n$1');
-  // Split multiple "name - qty unit" entries concatenated on one line
-  // e.g. "curry leaves - 1 bunch coriander leaves - 3 bunches"
-  // Insert newline before a word sequence followed by " - number"
-  raw=raw.replace(/(\d+\s+\w+)\s+([a-zA-Z][a-zA-Z\s]+?)\s*-\s*(\d)/g,'$1\n$2 - $3');
+  // Split multiple entries concatenated on one line e.g. "curry leaves - 1 bunch coriander leaves - 3 bunches"
+  // Require at least 2 words before the " - number" to avoid splitting "Basmati soaked - 3 cups"
+  raw=raw.replace(/(\d+(?:\s+\w+)?)\s+([a-zA-Z][a-zA-Z]+(?:\s+[a-zA-Z]+)+?)\s*[-–—]\s*(\d)/g,'$1\n$2 - $3');
 
   var lines=raw.split(/\r?\n/).map(function(l){return l.trim();}).filter(function(l){return l.length>1;});
 
@@ -701,7 +863,7 @@ function handlePaste(e, rid){
     // Fall back to natural language parser
     var p=parseRecipeLine(line);
     if(p){
-      var isUnknown=p.unit==='count' && p._rawUnit && !['count','piece','pieces','each','pc','pcs','pack','whole',''].includes(p._rawUnit.toLowerCase().trim());
+      var isUnknown=p.unit==='count' && p._rawUnit && !['count','piece','pieces','each','pc','pcs','pack','packs','packet','whole',''].includes(p._rawUnit.toLowerCase().trim());
       addRow(rid,p.name,p.qty,isUnknown?p._rawUnit:p.unit,isUnknown);
     }
   });
@@ -754,18 +916,111 @@ function doScale(rid){
 
   var tbody=document.getElementById('rb-'+rid);
   tbody.innerHTML='';
+  var conversions=[];
   ings.forEach(function(ing){
     var sq=ing.qty*sf;
     var conv=convertUnit(sq,ing.unit,ing.name,ing.liq);
-    var badge=ing.liq?'<span class="badge bl">💧 Liquid</span>':'';
-    var origD=ing.noQty?'🧂 Pantry item':fmtQ(ing.qty)+' '+dispUnit(ing.unit,ing.liq);
-    var scalD=ing.noQty?'🧂 Pantry item':fmtQ(sq)+' '+dispUnit(ing.unit,ing.liq);
-    var convD=ing.noQty?'scale as needed':fmtQ(conv.qty)+' '+conv.unit;
+    var badge=ing.liq?'<span class="liq-badge">liquid</span>':'';
+    var origD=ing.noQty?'pantry':fmtQU(ing.qty,ing.unit,ing.liq);
+    var scalD=ing.noQty?'pantry':fmtQU(sq,ing.unit,ing.liq);
+    var convD=fmtConv(conv,ing);
+    // Track conversion if unit changed
+    if(!ing.noQty && conv.unit !== dispUnit(ing.unit,ing.liq)){
+      conversions.push({name:ing.name, fromQty:sq, fromUnit:dispUnit(ing.unit,ing.liq), toQty:conv.qty, toUnit:conv.unit});
+    }
     var tr=document.createElement('tr');
-    tr.innerHTML=`<td><strong>${esc(ing.name)}</strong></td>`
-      +`<td class="co">${origD} ${badge}</td><td class="cs">${scalD}</td><td class="ck">${convD}</td>`;
+    tr.innerHTML=`<td class="ing-name">${esc(ing.name)} ${badge}</td>`
+      +`<td class="col-orig">${origD}</td><td class="col-scaled">${scalD}</td><td class="col-kitchen">${convD}</td>`;
     tbody.appendChild(tr);
   });
+
+  // Build conversion legend — unit conversions + produce weight assumptions
+  var legendEl=document.getElementById('legend-'+rid);
+  var produceNotes=[];
+  ings.forEach(function(ing){
+    if(ing.unit==='count'){
+      var lbsEach=getCountLbs(ing.name);
+      if(lbsEach!==null) produceNotes.push(`${esc(ing.name)}: ${lbsEach} lbs each`);
+    }
+  });
+  if(conversions.length || produceNotes.length){
+    var html='';
+    if(conversions.length){
+      html+='<div class="legend-title">Conversions applied</div>'
+        +conversions.map(function(c){
+          return `<span class="legend-item">${esc(c.name)}: ${fmtQ(c.fromQty)} ${c.fromUnit} → ${fmtQ(c.toQty)} ${pluralUnit(c.toUnit,c.toQty)}</span>`;
+        }).join('');
+    }
+    if(produceNotes.length){
+      html+='<div class="legend-title" style="margin-top:8px">Produce weight used</div>'
+        +produceNotes.map(function(n){return `<span class="legend-item">${n}</span>`;}).join('');
+    }
+    legendEl.innerHTML=html;
+    legendEl.style.display='block';
+  } else {
+    legendEl.style.display='none';
+  }
+
+  // ─── Tally: sum all kitchen measures in lbs, compare to target ───────────────
+  const OZ_PER_SERVING = {'16oz':16,'12oz':12,'8oz':8,'4oz':4,'servings':null,'counts':null};
+  var totalLbs=0, skippedItems=[], expandedItems=[];
+  ings.forEach(function(ing){
+    if(ing.noQty){ skippedItems.push(ing.name); return; }
+    var sq=ing.qty*sf;
+    var conv=convertUnit(sq,ing.unit,ing.name,ing.liq);
+    var lbs=toLbs(conv.qty, conv.unit, ing.liq, ing.name);
+    if(lbs===null){ skippedItems.push(ing.name); }
+    else {
+      totalLbs+=lbs;
+      var exp=getCookExpansion(ing.name);
+      if(exp>1.0) expandedItems.push(`${esc(ing.name)}: ×${exp} (cooked)`);
+    }
+  });
+
+  var tallyEl=document.getElementById('tally-'+rid);
+  var ozPerServing=OZ_PER_SERVING[tu];
+  var skippedNote=skippedItems.length
+    ? `<div class="tally-skipped">Excluded (no weight): ${skippedItems.map(function(s){return esc(s);}).join(', ')}</div>`
+    : '';
+  var expandedNote=expandedItems.length
+    ? `<div class="tally-skipped" style="color:#888">Cook expansion applied: ${expandedItems.join(', ')}</div>`
+    : '';
+
+  if(ozPerServing){
+    var expectedLbs=(tc*ozPerServing)/16;
+    var diffPct=Math.abs(totalLbs-expectedLbs)/expectedLbs*100;
+    var ok=diffPct<=15;
+    var statusIcon=ok?'✅':'⚠️';
+    var statusColor=ok?'#1a7a45':'#b7600a';
+    tallyEl.innerHTML=`
+      <div class="legend-title">Weight Tally</div>
+      <div class="tally-row">
+        <span class="tally-label">Total weighed ingredients</span>
+        <span class="tally-val">${fmtQ(totalLbs)} lbs</span>
+      </div>
+      <div class="tally-row">
+        <span class="tally-label">Expected &nbsp;(${tc} × ${ozPerServing} oz)</span>
+        <span class="tally-val">${fmtQ(expectedLbs)} lbs</span>
+      </div>
+      <div class="tally-row tally-status" style="color:${statusColor}">
+        <span>${statusIcon} ${ok?'Looks good':'Check quantities'} — ${diffPct.toFixed(1)}% ${totalLbs>expectedLbs?'over':'under'} expected</span>
+      </div>
+      ${expandedNote}
+      ${skippedNote}`;
+  } else {
+    tallyEl.innerHTML=`
+      <div class="legend-title">Weight Tally</div>
+      <div class="tally-row">
+        <span class="tally-label">Total weighed ingredients</span>
+        <span class="tally-val">${fmtQ(totalLbs)} lbs</span>
+      </div>
+      <div class="tally-row" style="color:#aaa;font-size:.78rem">
+        <span>Select an oz serving size (e.g. 12 oz) to validate against target</span>
+      </div>
+      ${expandedNote}
+      ${skippedNote}`;
+  }
+  tallyEl.style.display='block';
 
   var sec=document.getElementById('res-'+rid);
   sec.classList.remove('hidden');
@@ -788,7 +1043,7 @@ function copySheets(rid){
   d.ings.forEach(function(ing){
     var sq=ing.qty*d.sf;
     var c=convertUnit(sq,ing.unit,ing.name,ing.liq);
-    var cv=ing.noQty?'Pantry item':fmtQ(c.qty)+' '+c.unit;
+    var cv=fmtConv(c,ing);
     lines.push(ing.name+'\t'+cv);
   });
   _copy(lines.join('\n'),'✅ Copied for Google Sheets!');
@@ -801,8 +1056,8 @@ function copyTxt(rid){
   d.ings.forEach(function(ing){
     var sq=ing.qty*d.sf;
     var c=convertUnit(sq,ing.unit,ing.name,ing.liq);
-    var cv=ing.noQty?'(scale as needed)':(fmtQ(c.qty)+' '+c.unit);
-    lines.push(cv.padEnd(20)+' '+ing.name);
+    var cv=fmtConv(c,ing);
+    lines.push(ing.name.padEnd(32)+cv);
   });
   _copy(lines.join('\n'),'✅ Copied as text!');
 }
@@ -821,8 +1076,8 @@ function notify(msg){
   setTimeout(function(){el.remove();},3000);
 }
 function resetPanel(rid){
-  document.getElementById('bc-'+rid).value='12';
-  document.getElementById('tc-'+rid).value='24';
+  document.getElementById('bc-'+rid).value='5';
+  document.getElementById('tc-'+rid).value='60';
   clearRows(rid); addRow(rid);
   document.getElementById('res-'+rid).classList.add('hidden');
 }
